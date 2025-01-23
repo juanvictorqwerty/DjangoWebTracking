@@ -72,5 +72,31 @@
 
         console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
     }
+    
+    function updatePosition() {
+        navigator.geolocation.getCurrentPosition(getPosition, function (error) {
+            console.error("Error getting location: ", error.message);
+        });
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getPosition, function (error) {
+            console.error("Error getting location: ", error.message);
+        });
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+    }
+
+    updatePosition();
+
+    // Call updatePosition every 60 seconds (60000 milliseconds)
+    setInterval(updatePosition, 60000);
+
+    // Call updatePosition when the page loads
+    //updatePosition();
+
+    
+
 
 </script>
+

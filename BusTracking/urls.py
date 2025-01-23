@@ -17,8 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from App import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("App.urls")),
     path('api/', include('App.urls')), 
+    path('get-latest-coordinates/', views.get_latest_coordinates, name='get_latest_coordinates'),
+    path('app/', include('App.urls')), 
 ]

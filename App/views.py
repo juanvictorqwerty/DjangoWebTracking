@@ -10,8 +10,9 @@ from App.models import BusCoordinates
 def index(request , *args , **kwargs) :
     return render(request, "index.html" , {})
 
-def usersView(request , *args , **kwargs) :
-    return HttpResponse("<h1>Users View</h1>")
+def usersView(request):  # Renamed from userViews to usersView
+    return render(request, 'App/usersView.html')
+
 
 @csrf_exempt  # Disable CSRF for simplicity (use cautiously)
 def save_location(request):
@@ -31,3 +32,17 @@ def save_location(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+def get_latest_coordinates(request):
+    try:
+        # Fetch the latest entry from the BusCoordinates table
+        latest_coordinates = BusCoordinates.objects.order_by('-id').first()
+
+        data = {
+            "latitude": latest_coordinates.latitude,
+            "longitude": latest_coordinates.longitude,
+            "accuracy": latest_coordinates.accuracy
+        }
+        return JsonResponse(data, safe=False)
+    except BusCoordinates.DoesNotExist:
+        return JsonResponse({"error": "No coordinates found"}, status=404)

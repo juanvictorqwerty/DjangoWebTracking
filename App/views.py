@@ -39,6 +39,7 @@ def get_latest_coordinates(request):
         latest_coordinates = BusCoordinates.objects.order_by('-id').first()
 
         data = {
+            "id": latest_coordinates.id,
             "latitude": latest_coordinates.latitude,
             "longitude": latest_coordinates.longitude,
             "accuracy": latest_coordinates.accuracy

@@ -40,6 +40,9 @@
     osm.addTo(map);
 
     function updateMap() {
+        
+        let marker = null; 
+        let circle =null;
     // Fetch the latest coordinates from the Django API
     fetch('/api/get-latest-coordinates/')
         .then(response => {

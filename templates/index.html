@@ -74,18 +74,41 @@
     }
     
     function updatePosition() {
-        navigator.geolocation.getCurrentPosition(getPosition, function (error) {
-            console.error("Error getting location: ", error.message);
+    navigator.geolocation.getCurrentPosition(function (position) {
+        var lat = position.coords.latitude;
+        var long = position.coords.longitude;
+        var accuracy = position.coords.accuracy;
+
+        // Prepare data to send
+        var data = {
+            latitude: lat,
+            longitude: long,
+            accuracy: accuracy
+        };
+
+        // Send data to the server using Fetch API
+        fetch("/api/save-location/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Response from server:", data);
+        })
+        .catch(error => {
+            console.error("Error saving location:", error);
         });
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(getPosition, function (error) {
-            console.error("Error getting location: ", error.message);
-        });
-    } else {
-        console.error("Geolocation is not supported by this browser.");
-    }
-    }
+    }, function (error) {
+        console.error("Error getting location:", error.message);
+    });
+}
+
+// Call updatePosition every 60 seconds (60000 milliseconds)
+setInterval(updatePosition, 60000);
+
 
     updatePosition();
 
